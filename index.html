@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<style>
+    #chess-board {
+      width: 500px;
+      height: 500px;
+      border: 1px solid black;
+    }
+    
+    .chess-piece {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .white-piece {
+      background-color: #ffffff;
+    }
+    
+    .black-piece {
+      background-color: #000000;
+    }
+    </style>
+
+<head>
+<title>Chess Board</title>
+</head>
+<body>
+<div id="chess-board"></div>
+<script>
+var chessBoard = document.getElementById("chess-board");
+
+var pieces = [];
+
+for (var i = 0; i < 64; i++) {
+  var piece = document.createElement("div");
+  piece.className = "chess-piece";
+
+  if (i % 2 == 0) {
+    if (i < 32) {
+      piece.className += " white-piece";
+    } else {
+      piece.className += " black-piece";
+    }
+  }
+
+  chessBoard.appendChild(piece);
+  pieces.push(piece);
+}
+
+var dragStart = function(event) {
+  var piece = event.target;
+  piece.style.position = "absolute";
+  piece.style.zIndex = 100;
+  var offset = piece.getBoundingClientRect();
+  event.dataTransfer.setData("text/plain", piece.id);
+  piece.style.left = event.clientX - offset.left + "px";
+  piece.style.top = event.clientY - offset.top + "px";
+};
+
+var drop = function(event) {
+  var piece = document.getElementById(event.dataTransfer.getData("text/plain"));
+  var offset = piece.getBoundingClientRect();
+  piece.style.position = "static";
+  piece.style.left = event.clientX - offset.left + "px";
+  piece.style.top = event.clientY - offset.top + "px";
+};
+
+document.addEventListener("mousedown", dragStart);
+document.addEventListener("mouseup", drop);
+    </script>
+</body>
+</html>
